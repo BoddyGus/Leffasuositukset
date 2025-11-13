@@ -1,6 +1,6 @@
 # Leffasuositukset
 
-Leffasuositukset on web-sovellus, jossa käyttäjät voivat jakaa elokuvavinkkejä ja arvioida muiden lisäämiä elokuvia.  
+Leffasuositukset on web-sovellus, jossa käyttäjät voivat jakaa elokuvavinkkejä ja arvioida muiden lisäämiä elokuvia.
 Sovellus on toteutettu Python-kielellä käyttäen Flask-kirjastoa, ja tiedot tallennetaan SQLite-tietokantaan.
 
 ## Sovelluksen toiminnot
@@ -17,10 +17,10 @@ Sovellus on toteutettu Python-kielellä käyttäen Flask-kirjastoa, ja tiedot ta
 
 ## Tietokohteet
 
-- **Elokuva**  
+- **Elokuva**
   Pääasiallinen tietokohde, joka sisältää elokuvan perustiedot (nimi, genre, kuvaus, vuosi).
-  
-- **Arvostelu**  
+
+- **Arvostelu**
   Toissijainen tietokohde, joka sisältää käyttäjän antaman kommentin ja arvosanan tietylle elokuvalle.
 
 ## Tekniset tiedot
@@ -32,8 +32,22 @@ Sovellus on toteutettu Python-kielellä käyttäen Flask-kirjastoa, ja tiedot ta
 - Sovelluksessa ei käytetä JavaScriptiä.
 - Versionhallinta on toteutettu Gitillä, ja koodi on julkaistu GitHubissa.
 
-## Käyttöohje (kehitysvaiheessa)
+## Sovelluksen asennus
 
-1. Kloonaa repositorio:  
-   ```bash
-   git clone https://github.com/<käyttäjänimesi>/leffasuositukset
+Asenna `flask`-kirjasto:
+
+```
+$ pip install flask
+```
+
+Luo tietokannan taulut ja lisää alkutiedot:
+
+```
+$ sqlite3 database.db < schema.sql
+```
+
+Voit käynnistää sovelluksen näin:
+
+```
+$ flask run
+```

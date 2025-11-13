@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Leffasuositukset</title>
+  <meta charset="utf-8" />
+</head>
+<body>
+  <h1>Leffasuositukset</h1>
+
+  {% if session.username %}
+    <p>Olet kirjautunut nimellä {{ session.username }}</p>
+  {% endif %}
+
+  <p>
+    <a href="/register">Rekisteröidy</a>
+    <a href="/login">Kirjaudu</a>
+    <a href="/logout">Kirjaudu ulos</a>
+    {% if session.username %}
+      | <a href="/new_item">Lisää uusi elokuva</a>
+    {% endif %}
+  </p>
+
+  <form action="/" method="get" style="margin: 1em 0;">
+    <input type="text" name="q" placeholder="Hae nimellä, tyylilajilla, kuvauksella tai vuodella" value="{{ q or '' }}" style="width: 420px;" />
+    <input type="submit" value="Hae" />
+  </form>
+
+  {% if items and items|length > 0 %}
+    <ul>
+      {% for item in items %}
+        <li style="margin-bottom: 0.8em;">
+          <strong>{{ item.title }}</strong>
+          {% if item.year %} ({{ item.year }}){% endif %}
+          {% if item.genre %} — {{ item.genre }}{% endif %}
+          <br />
+          {% if item.description %}<em>{{ item.description }}</em><br />{% endif %}
+          Lisännyt: {{ item.username }}
+          {% if item.created_at %} | Lisätty: {{ item.created_at }}{% endif %}
+          <br />
+          {% if session.username %}
+            {% if item.user_id == (db_user_id | default(None)) %}
+              {# fallback if you render user id; not used now #}
+            {% endif %}
+            {% if session.username == item.username %}
+              <form action="/items/{{ item.id }}/delete" method="post" style="display:inline;">
+                <a href="/items/{{ item.id }}/edit">Muokkaa</a>
+                <input type="submit" value="Poista" onclick="return confirm('Poistetaanko?');" />
+              </form>
+            {% endif %}
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Ei elokuvia vielä.</p>
+  {% endif %}
+</body>
+</html>

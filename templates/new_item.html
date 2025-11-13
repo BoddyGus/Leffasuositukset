@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lisää elokuva</title>
+  <meta charset="utf-8" />
+</head>
+<body>
+  <h1>Lisää elokuva</h1>
+
+  <form action="/items/create" method="post">
+    <p>
+      Nimi: <br />
+      <input type="text" name="title" required />
+    </p>
+    <p>
+      Tyylilaji (genre): <br />
+      <select name="genre" required>
+        <option value="" disabled selected>-- valitse genre --</option>
+        {% for g in allowed_genres %}
+          <option value="{{ g }}">{{ g }}</option>
+        {% endfor %}
+      </select>
+    </p>
+    <p>
+      Sallitut genret: {{ allowed_genres | join(', ') }}
+    </p>
+    <p>
+      Vuosi: <br />
+      <input type="number" name="year" min="1888" max="2100" />
+    </p>
+    <p>
+      Kuvaus: <br />
+      <textarea name="description" rows="4" cols="40"></textarea>
+    </p>
+    <input type="submit" value="Tallenna" />
+    <a href="/">Peruuta</a>
+  </form>
+</body>
+</html>

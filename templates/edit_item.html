@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Muokkaa elokuvaa</title>
+  <meta charset="utf-8" />
+</head>
+<body>
+  <h1>Muokkaa elokuvaa</h1>
+
+  <form action="/items/{{ item.id }}/update" method="post">
+    <p>
+      Nimi: <br />
+      <input type="text" name="title" value="{{ item.title }}" required />
+    </p>
+    <p>
+      Tyylilaji (genre): <br />
+      <select name="genre" required>
+        <option value="">-- valitse genre --</option>
+        {% for g in allowed_genres %}
+          <option value="{{ g }}" {% if item.genre == g %}selected{% endif %}>{{ g }}</option>
+        {% endfor %}
+      </select>
+    </p>
+    <p>
+      Sallitut genret: {{ allowed_genres | join(', ') }}
+    </p>
+    <p>
+      Vuosi: <br />
+      <input type="number" name="year" min="1888" max="2100" value="{{ item.year or '' }}" />
+    </p>
+    <p>
+      Kuvaus: <br />
+      <textarea name="description" rows="4" cols="40">{{ item.description or '' }}</textarea>
+    </p>
+    <input type="submit" value="Päivitä" />
+    <a href="/">Peruuta</a>
+  </form>
+</body>
+</html>
