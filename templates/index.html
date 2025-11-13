@@ -14,8 +14,8 @@
   <p>
     <a href="/register">Rekisteröidy</a>
     <a href="/login">Kirjaudu</a>
-    <a href="/logout">Kirjaudu ulos</a>
     {% if session.username %}
+        <a href="/logout">Kirjaudu ulos</a>
       | <a href="/new_item">Lisää uusi elokuva</a>
     {% endif %}
   </p>
