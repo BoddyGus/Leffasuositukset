@@ -1,32 +1,41 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <title>Kirjautuminen</title>
+  <meta charset="utf-8" />
 </head>
-
 <body>
-  {% if session.username %}
-  <p>
-    Olet kirjautunut nimellä {{ session.username }}
-  </p>
-  <p>
-    <a href="/logout">Kirjaudu ulos</a>
-  </p>
-  {% else %}
-  <form action="/login" method="post">
-    <h1>Kirjaudu sisään</h1>
-    <p>
-      Tunnus: <br />
-      <input type="text" name="username" />
-    </p>
-    <p>
-      Salasana: <br />
-      <input type="password" name="password" />
-    </p>
-    <input type="submit" value="Kirjaudu" />
-  </form>
-  {% endif %}
-</body>
 
+  {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+      <ul style="list-style:none; padding-left:0;">
+        {% for category, msg in messages %}
+          <li style="margin:4px 0; color:{% if category=='error' %}#b00000{% elif category=='success' %}#0a6000{% else %}#222{% endif %};">
+            {{ msg }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  {% if session.username %}
+    <p>Olet kirjautunut nimellä {{ session.username }}</p>
+    <p><a href="/logout">Kirjaudu ulos</a></p>
+  {% else %}
+    <form action="/login" method="post">
+      <h1>Kirjaudu sisään</h1>
+      <p>
+        Tunnus: <br />
+        <input type="text" name="username" />
+      </p>
+      <p>
+        Salasana: <br />
+        <input type="password" name="password" />
+      </p>
+      <input type="submit" value="Kirjaudu" />
+    </form>
+    <p>Ei vielä tunnusta? <a href="{{ url_for('user_bp.register') }}">Rekisteröidy</a></p>
+  {% endif %}
+
+</body>
 </html>

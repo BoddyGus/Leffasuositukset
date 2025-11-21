@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, request, redirect, session, url_for
+from flask import Blueprint, render_template, request, redirect, session, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 import db
+from queries.user_queries import create_user, find_user_credentials, find_user_id
 
 user_bp = Blueprint("user_bp", __name__)
 
@@ -27,20 +28,25 @@ def create():
     username = request.form["username"].strip()
     password1 = request.form["password1"]
     password2 = request.form["password2"]
+
     if not username:
-        return "VIRHE: tunnus puuttuu"
+        flash("Tunnus puuttuu", "error")
+        return render_template("register.html")
     if password1 != password2:
-        return "VIRHE: salasanat eivät ole samat"
+        flash("Salasanat eivät ole samat", "error")
+        return render_template("register.html")
+
     password_hash = generate_password_hash(password1)
 
     try:
         sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
         db.execute(sql, [username, password_hash])
     except Exception:
-        return "VIRHE: tunnus on jo varattu"
+        flash("Tunnus on jo varattu", "error")
+        return render_template("register.html")
 
+    flash("Käyttäjä luotu onnistuneesti. Kirjaudu sisään.", "success")
     return redirect(url_for("user_bp.login"))
-
 
 @user_bp.route("/login", methods=["GET", "POST"])
 def login():
@@ -51,20 +57,18 @@ def login():
     password = request.form["password"]
 
     rows = db.query("SELECT id, password_hash FROM users WHERE username = ?", [username])
-    if not rows:
-        return "VIRHE: väärä tunnus tai salasana"
+    if not rows or not check_password_hash(rows[0]["password_hash"], password):
+        flash("Väärä tunnus tai salasana", "error")
+        return render_template("login.html")
 
-    password_hash = rows[0]["password_hash"]
-    if check_password_hash(password_hash, password):
-        session["username"] = username
-        return redirect(url_for("reviews_bp.index"))
-    else:
-        return "VIRHE: väärä tunnus tai salasana"
-
+    session["username"] = username
+    flash("Kirjautuminen onnistui", "success")
+    return redirect(url_for("reviews_bp.index"))
 
 @user_bp.route("/logout")
 def logout():
     session.pop("username", None)
+    flash("Kirjauduit ulos", "success")
     return redirect(url_for("reviews_bp.index"))
 
 
