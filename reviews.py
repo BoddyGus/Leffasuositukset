@@ -93,7 +93,11 @@ def items_edit(item_id):
     if not current_username():
         return redirect(url_for("user_bp.login"))
 
-    rows = db.query("SELECT * FROM items WHERE id = ?", [item_id])
+    rows = db.query(
+    "SELECT id, user_id, title, genre, description, year, created_at FROM items WHERE id = ?",
+    [item_id]
+    )
+
     if not rows:
         return "VIRHE: tietokohdetta ei löytynyt"
     item = rows[0]
