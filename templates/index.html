@@ -12,8 +12,10 @@
   {% endif %}
 
   <p>
+    {% if not session.username %}
     <a href="/register">Rekisteröidy</a>
     <a href="/login">Kirjaudu</a>
+    {% endif %}
     {% if session.username %}
         <a href="/logout">Kirjaudu ulos</a>
       | <a href="/new_item">Lisää uusi elokuva</a>
