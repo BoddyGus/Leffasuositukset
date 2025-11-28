@@ -1,7 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, session, url_for
 import db
 from user import current_username, current_user_id
-
+from queries.review_queries import list_reviews_for_item, get_avg_for_item, find_user_review, create_review
+from queries.item_queries import get_item
+from queries.user_queries import find_user_id
+from flask import flash
 
 ALLOWED_GENRES = [
     "toiminta",
@@ -159,6 +162,74 @@ def items_delete(item_id):
     db.execute("DELETE FROM items WHERE id = ?", [item_id])
     return redirect(url_for("reviews_bp.index"))
 
+@reviews_bp.route("/items/<int:item_id>")
+def items_show(item_id):
+    item = get_item(item_id)
+    if not item:
+        flash("Kohdetta ei löytynyt", "error")
+        return redirect(url_for("reviews_bp.index"))
+
+    reviews = list_reviews_for_item(item_id)
+    avg = get_avg_for_item(item_id)
+    my_review = None
+    uid = current_user_id()
+    if uid:
+        my_review = find_user_review(item_id, uid)
+
+    return render_template(
+        "item_detail.html",
+        item=item,
+        reviews=reviews,
+        avg_rating=avg["avg_rating"],
+        review_count=avg["review_count"],
+        my_review=my_review,
+    )
+@reviews_bp.route("/items/<int:item_id>/reviews/create", methods=["POST"])
+def reviews_create(item_id):
+    item = get_item(item_id)
+    if not item:
+        flash("Kohdetta ei löytynyt", "error")
+        return redirect(url_for("reviews_bp.index"))
+
+    uid = current_user_id()
+    if not uid:
+        flash("Kirjaudu ensin", "error")
+        return redirect(url_for("user_bp.login"))
+
+    rating_raw = request.form.get("rating", "").strip()
+    comment = request.form.get("comment", "")
+
+    try:
+        rating = int(rating_raw)
+    except ValueError:
+        flash("Arvosana on pakollinen", "error")
+        return redirect(url_for("reviews_bp.items_show", item_id=item_id))
+
+    if rating < 1 or rating > 5:
+        flash("Arvosanan tulee olla 1–5", "error")
+        return redirect(url_for("reviews_bp.items_show", item_id=item_id))
+
+    if find_user_review(item_id, uid):
+        flash("Olet jo arvostellut tämän elokuvan", "error")
+        return redirect(url_for("reviews_bp.items_show", item_id=item_id))
+
+    try:
+        create_review(item_id, uid, rating, comment)
+    except Exception:
+        flash("Arvostelun tallennus epäonnistui", "error")
+        return redirect(url_for("reviews_bp.items_show", item_id=item_id))
+
+    flash("Arvostelu tallennettu", "success")
+    return redirect(url_for("reviews_bp.items_show", item_id=item_id))
 
 def init_reviews(app):
     app.register_blueprint(reviews_bp)
+
+def current_username():
+    return session.get("username")
+
+def current_user_id():
+    username = current_username()
+    if not username:
+        return None
+    return find_user_id(username)

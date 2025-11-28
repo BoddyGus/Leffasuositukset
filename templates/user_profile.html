@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Käyttäjä: {{ username }}</title>
+</head>
+<body>
+
+{% with messages = get_flashed_messages(with_categories=True) %}
+  {% if messages %}
+    <ul style="list-style:none; padding-left:0; margin:0 0 12px;">
+      {% for category, msg in messages %}
+        <li style="margin:4px 0; color:{% if category=='error' %}#b00000{% elif category=='success' %}#0a6000{% else %}#222{% endif %};">
+          {{ msg }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<p><a href="{{ url_for('reviews_bp.index') }}">← Takaisin etusivulle</a></p>
+
+<h1>{{ username }}</h1>
+<p>Lisättyjä elokuvia: <strong>{{ movie_count }}</strong></p>
+
+<h2>Elokuvat</h2>
+<ul>
+  {% for m in movies %}
+    <li>
+      <a href="{{ url_for('reviews_bp.items_show', item_id=m.id) }}">
+        {{ m.title }}{% if m.year %} ({{ m.year }}){% endif %}
+      </a>
+      {% if m.genre %} — {{ m.genre }}{% endif %}
+      <span style="color:#555;"> · {{ m.created_at }}</span>
+    </li>
+  {% else %}
+    <li>Ei vielä elokuvia.</li>
+  {% endfor %}
+</ul>
+
+</body>
+</html>

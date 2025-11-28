@@ -29,6 +29,7 @@
     <a href="/login">Kirjaudu</a>
     {% endif %}
     {% if session.username %}
+        <a href="{{ url_for('user_bp.profile', username=session.username) }}">Profiili</a> |
         <a href="/logout">Kirjaudu ulos</a>
       | <a href="/new_item">Lisää uusi elokuva</a>
     {% endif %}
@@ -43,7 +44,7 @@
     <ul>
       {% for item in items %}
         <li style="margin-bottom: 0.8em;">
-          <strong>{{ item.title }}</strong>
+          <strong><a href="{{ url_for('reviews_bp.items_show', item_id=item.id) }}">{{ item.title }}</a></strong>
           {% if item.year %} ({{ item.year }}){% endif %}
           {% if item.genre %} — {{ item.genre }}{% endif %}
           <br />

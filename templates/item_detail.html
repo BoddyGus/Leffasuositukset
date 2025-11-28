@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>{{ item.title }} – Elokuva</title>
+  <style>
+    .multiline { white-space: pre-line; }
+    .muted { color: #555; font-size: 0.95em; }
+  </style>
+</head>
+<body>
+
+{% with messages = get_flashed_messages(with_categories=True) %}
+  {% if messages %}
+    <ul style="list-style:none; padding-left:0; margin:0 0 12px;">
+      {% for category, msg in messages %}
+        <li style="margin:4px 0; color:{% if category=='error' %}#b00000{% elif category=='success' %}#0a6000{% else %}#222{% endif %};">
+          {{ msg }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<p><a href="{{ url_for('reviews_bp.index') }}">← Takaisin etusivulle</a></p>
+
+<h1>{{ item.title }}{% if item.year %} ({{ item.year }}){% endif %}</h1>
+<p class="muted">
+  {% if item.genre %}<strong>{{ item.genre }}</strong> · {% endif %}
+  Lisännyt: {{ item.user_id }} · {{ item.created_at }}
+</p>
+
+{% if item.description %}
+  <p><em class="multiline">{{ item.description }}</em></p>
+{% endif %}
+
+<hr />
+
+<h2>Arvostelut</h2>
+<p class="muted">
+  {% if review_count %}
+    Keskiarvo: {{ "%.1f"|format(avg_rating or 0) }} / 5 ({{ review_count }} arvostelua)
+  {% else %}
+    Ei vielä arvosteluja.
+  {% endif %}
+</p>
+
+<ul>
+  {% for r in reviews %}
+    <li style="margin-bottom: 0.6em;">
+      <strong>{{ r.username }}</strong> antoi {{ r.rating }} / 5
+      <div class="multiline">{{ r.comment or '' }}</div>
+      <span class="muted">{{ r.created_at }}</span>
+    </li>
+  {% endfor %}
+</ul>
+
+{% if session.username %}
+  {% if not my_review %}
+    <hr />
+    <h3>Lisää arvostelu</h3>
+    <form action="{{ url_for('reviews_bp.reviews_create', item_id=item.id) }}" method="post">
+      <p>
+        Arvosana:
+        <select name="rating" required>
+          <option value="" disabled selected>–</option>
+          {% for n in [1,2,3,4,5] %}
+            <option value="{{ n }}">{{ n }}</option>
+          {% endfor %}
+        </select>
+      </p>
+      <p>
+        Kommentti: <br />
+        <textarea name="comment" rows="4" cols="50"></textarea>
+      </p>
+      <input type="submit" value="Lähetä arvostelu" />
+    </form>
+  {% else %}
+    <p class="muted">Olet jo arvostellut tämän elokuvan ({{ my_review.rating }}/5).</p>
+  {% endif %}
+{% else %}
+  <p class="muted">Kirjaudu sisään lisätäksesi arvostelun.</p>
+{% endif %}
+
+</body>
+</html>

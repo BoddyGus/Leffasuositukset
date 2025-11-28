@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, session, url_fo
 from werkzeug.security import generate_password_hash, check_password_hash
 import db
 from queries.user_queries import create_user, find_user_credentials, find_user_id
+from flask import flash
 
 user_bp = Blueprint("user_bp", __name__)
 
@@ -65,6 +66,25 @@ def login():
     flash("Kirjautuminen onnistui", "success")
     return redirect(url_for("reviews_bp.index"))
 
+@user_bp.route("/users/<username>")
+def profile(username):
+    # hae käyttäjä-id
+    rows = db.query("SELECT id FROM users WHERE username = ?", [username])
+    if not rows:
+        flash("Käyttäjää ei löytynyt", "error")
+        return redirect(url_for("reviews_bp.index"))
+    uid = rows[0]["id"]
+
+    # tilastot ja lista
+    count_rows = db.query("SELECT COUNT(*) AS movie_count FROM items WHERE user_id = ?", [uid])
+    movie_count = count_rows[0]["movie_count"] if count_rows else 0
+
+    movies = db.query(
+        "SELECT id, title, genre, year, created_at FROM items WHERE user_id = ? ORDER BY created_at DESC",
+        [uid]
+    )
+
+    return render_template("user_profile.html", username=username, movie_count=movie_count, movies=movies)
 @user_bp.route("/logout")
 def logout():
     session.pop("username", None)
