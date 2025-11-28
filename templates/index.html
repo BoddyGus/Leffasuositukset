@@ -5,6 +5,18 @@
   <meta charset="utf-8" />
 </head>
 <body>
+  {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+      <script>
+        (function () {
+          const messages = {{ messages | tojson }};
+          const text = messages.map(m => m[1]).join("\n");
+          if (text) alert(text);
+        })();
+      </script>
+    {% endif %}
+  {% endwith %}
+
   <h1>Leffasuositukset</h1>
 
   {% if session.username %}
