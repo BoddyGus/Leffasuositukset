@@ -70,14 +70,12 @@ def login():
 
 @user_bp.route("/users/<username>")
 def profile(username):
-    # hae käyttäjä-id
     rows = db.query("SELECT id FROM users WHERE username = ?", [username])
     if not rows:
         flash("Käyttäjää ei löytynyt", "error")
         return redirect(url_for("reviews_bp.index"))
     uid = rows[0]["id"]
 
-    # tilastot ja lista
     count_rows = db.query("SELECT COUNT(*) AS movie_count FROM items WHERE user_id = ?", [uid])
     movie_count = count_rows[0]["movie_count"] if count_rows else 0
 
