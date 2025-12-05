@@ -28,7 +28,6 @@ def register():
 
 @user_bp.route("/create", methods=["POST"])
 def create():
-    check_csrf()
     username = request.form["username"].strip()
     password1 = request.form["password1"]
     password2 = request.form["password2"]
@@ -56,7 +55,6 @@ def create():
 def login():
     if request.method == "GET":
         return render_template("login.html")
-    check_csrf()
     username = request.form["username"].strip()
     password = request.form["password"]
 
