@@ -7,13 +7,13 @@
 <body>
   {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
-      <script>
-        (function () {
-          const messages = {{ messages | tojson }};
-          const text = messages.map(m => m[1]).join("\n");
-          if (text) alert(text);
-        })();
-      </script>
+      <ul style="list-style:none; padding-left:0; margin:0 0 12px;">
+        {% for category, msg in messages %}
+          <li style="margin:4px 0; color:{% if category=='error' %}#b00000{% elif category=='success' %}#0a6000{% else %}#222{% endif %};">
+            {{ msg }}
+          </li>
+        {% endfor %}
+      </ul>
     {% endif %}
   {% endwith %}
 
@@ -59,7 +59,7 @@
             {% if session.username == item.username %}
               <form action="/items/{{ item.id }}/delete" method="post" style="display:inline;">
                 <a href="/items/{{ item.id }}/edit">Muokkaa</a>
-                <input type="submit" value="Poista" onclick="return confirm('Poistetaanko?');" />
+                <input type="submit" value="Poista" />
               </form>
             {% endif %}
           {% endif %}
