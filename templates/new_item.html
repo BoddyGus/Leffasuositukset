@@ -8,6 +8,7 @@
   <h1>Lisää elokuva</h1>
 
   <form action="/items/create" method="post">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <p>
       Nimi: <br />
       <input type="text" name="title" required />

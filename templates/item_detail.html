@@ -60,6 +60,7 @@
     <hr />
     <h3>Lisää arvostelu</h3>
     <form action="{{ url_for('reviews_bp.reviews_create', item_id=item.id) }}" method="post">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
       <p>
         Arvosana:
         <select name="rating" required>

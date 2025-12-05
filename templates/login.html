@@ -23,6 +23,7 @@
     <p><a href="/logout">Kirjaudu ulos</a></p>
   {% else %}
     <form action="/login" method="post">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
       <h1>Kirjaudu sisään</h1>
       <p>
         Tunnus: <br />
