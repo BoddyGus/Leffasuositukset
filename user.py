@@ -3,6 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import db
 from queries.user_queries import create_user, find_user_credentials, find_user_id
 from flask import flash
+from app import check_csrf
+import secrets
 
 user_bp = Blueprint("user_bp", __name__)
 
@@ -63,6 +65,7 @@ def login():
         return render_template("login.html")
 
     session["username"] = username
+    session["csrf_token"] = secrets.token_hex(16)
     flash("Kirjautuminen onnistui", "success")
     return redirect(url_for("reviews_bp.index"))
 

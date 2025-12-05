@@ -4,6 +4,7 @@ from user import current_username, current_user_id
 from queries.review_queries import list_reviews_for_item, get_avg_for_item, find_user_review, create_review
 from queries.item_queries import get_item
 from queries.user_queries import find_user_id
+from app import check_csrf
 from flask import flash
 
 ALLOWED_GENRES = [
