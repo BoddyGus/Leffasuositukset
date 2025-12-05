@@ -59,6 +59,7 @@ def new_item():
 
 @reviews_bp.route("/items/create", methods=["POST"])
 def items_create():
+    check_csrf()
     if not current_username():
         return redirect(url_for("user_bp.login"))
 
@@ -113,6 +114,7 @@ def items_edit(item_id):
 
 @reviews_bp.route("/items/<int:item_id>/update", methods=["POST"])
 def items_update(item_id):
+    check_csrf()
     if not current_username():
         return redirect(url_for("user_bp.login"))
 
@@ -151,6 +153,7 @@ def items_update(item_id):
 
 @reviews_bp.route("/items/<int:item_id>/delete", methods=["POST"])
 def items_delete(item_id):
+    check_csrf()
     if not current_username():
         return redirect(url_for("user_bp.login"))
 
@@ -187,6 +190,7 @@ def items_show(item_id):
     )
 @reviews_bp.route("/items/<int:item_id>/reviews/create", methods=["POST"])
 def reviews_create(item_id):
+    check_csrf()
     item = get_item(item_id)
     if not item:
         flash("Kohdetta ei löytynyt", "error")
