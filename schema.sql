@@ -9,6 +9,7 @@ CREATE TABLE items (
     user_id INTEGER NOT NULL,
     title TEXT NOT NULL,
     genre TEXT,
+    age_rating TEXT,
     description TEXT,
     year INTEGER,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -21,6 +21,14 @@ ALLOWED_GENRES = [
     "romantiikka",
 ]
 
+ALLOWED_AGE_RATINGS = {
+    "U": "Sallittu kaikenikäisille",
+    "PG": "Vanhempien harkinta suositeltavaa",
+    "12": "Kielletty alle 12-vuotiailta",
+    "15": "Kielletty alle 15-vuotiailta",
+    "18": "Kielletty alle 18-vuotiailta",
+}
+
 reviews_bp = Blueprint("reviews_bp", __name__)
 
 
@@ -29,7 +37,7 @@ def index():
     q = request.args.get("q", "").strip()
     params = []
     base_sql = """
-        SELECT i.id, i.title, i.genre, i.description, i.year, i.user_id, i.created_at, u.username
+        SELECT i.id, i.title, i.genre, i.age_rating, i.description, i.year, i.user_id, i.created_at, u.username
         FROM items i
         JOIN users u ON u.id = i.user_id
     """
@@ -65,6 +73,7 @@ def items_create():
 
     title = request.form.get("title", "").strip()
     genre = request.form.get("genre", "").strip()
+    age_rating = request.form.get("age_rating", "").strip()
     year = request.form.get("year", "").strip()
     description = request.form.get("description", "").strip()
 
@@ -72,6 +81,8 @@ def items_create():
         return "VIRHE: nimi puuttuu"
     if not genre:
         return "VIRHE: genre on pakollinen"
+    if not age_rating:
+        return "VIRHE: ikäraja on pakollinen"
 
     try:
         yval = int(year) if year else None
@@ -84,12 +95,14 @@ def items_create():
 
     if genre and genre not in ALLOWED_GENRES:
         return "VIRHE: genre ei ole sallittu. Sallitut genret: " + ", ".join(ALLOWED_GENRES)
+    if age_rating and age_rating not in ALLOWED_AGE_RATINGS:
+        return "VIRHE: ikäraja ei ole sallittu. Sallitut: " + ", ".join(ALLOWED_AGE_RATINGS.keys())
 
     sql = """
-        INSERT INTO items (user_id, title, genre, description, year)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO items (user_id, title, genre, age_rating, description, year)
+        VALUES (?, ?, ?, ?, ?, ?)
     """
-    db.execute(sql, [uid, title, genre, description, yval])
+    db.execute(sql, [uid, title, genre, age_rating, description, yval])
     return redirect(url_for("reviews_bp.index"))
 
 
@@ -99,7 +112,7 @@ def items_edit(item_id):
         return redirect(url_for("user_bp.login"))
 
     rows = db.query(
-    "SELECT id, user_id, title, genre, description, year, created_at FROM items WHERE id = ?",
+    "SELECT id, user_id, title, genre, age_rating, description, year, created_at FROM items WHERE id = ?",
     [item_id]
     )
 
@@ -126,6 +139,7 @@ def items_update(item_id):
 
     title = request.form.get("title", "").strip()
     genre = request.form.get("genre", "").strip()
+    age_rating = request.form.get("age_rating", "").strip()
     year = request.form.get("year", "").strip()
     description = request.form.get("description", "").strip()
 
@@ -133,6 +147,8 @@ def items_update(item_id):
         return "VIRHE: nimi puuttuu"
     if not genre:
         return "VIRHE: genre on pakollinen"
+    if not age_rating:
+        return "VIRHE: ikäraja on pakollinen"
 
     try:
         yval = int(year) if year else None
@@ -141,13 +157,15 @@ def items_update(item_id):
 
     if genre and genre not in ALLOWED_GENRES:
         return "VIRHE: genre ei ole sallittu. Sallitut genret: " + ", ".join(ALLOWED_GENRES)
+    if age_rating and age_rating not in ALLOWED_AGE_RATINGS:
+        return "VIRHE: ikäraja ei ole sallittu. Sallitut: " + ", ".join(ALLOWED_AGE_RATINGS.keys())
 
-    sql = """
-        UPDATE items
-           SET title = ?, genre = ?, description = ?, year = ?
-         WHERE id = ?
-    """
-    db.execute(sql, [title, genre, description, yval, item_id])
+        sql = """
+                UPDATE items
+                     SET title = ?, genre = ?, age_rating = ?, description = ?, year = ?
+                 WHERE id = ?
+        """
+        db.execute(sql, [title, genre, age_rating, description, yval, item_id])
     return redirect(url_for("reviews_bp.index"))
 
 
@@ -180,9 +198,16 @@ def items_show(item_id):
     if uid:
         my_review = find_user_review(item_id, uid)
 
+    rating_label = None
+    try:
+        rating_label = ALLOWED_AGE_RATINGS.get(item["age_rating"])
+    except Exception:
+        rating_label = None
+
     return render_template(
         "item_detail.html",
         item=item,
+        age_rating_label=rating_label,
         reviews=reviews,
         avg_rating=avg["avg_rating"],
         review_count=avg["review_count"],

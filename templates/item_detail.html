@@ -27,6 +27,7 @@
 <h1>{{ item.title }}{% if item.year %} ({{ item.year }}){% endif %}</h1>
 <p class="muted">
   {% if item.genre %}<strong>{{ item.genre }}</strong> · {% endif %}
+  {% if age_rating_label %}Ikäraja: {{ age_rating_label }} · {% elif item.age_rating %}Ikäraja: {{ item.age_rating }} · {% endif %}
   Lisännyt: {{ item.user_id }} · {{ item.created_at }}
 </p>
 

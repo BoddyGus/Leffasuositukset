@@ -1,6 +1,6 @@
 import db
 
-ITEM_COLUMNS = "id, user_id, title, genre, description, year, created_at"
+ITEM_COLUMNS = "id, user_id, title, genre, age_rating, description, year, created_at"
 
 def list_items(search: str):
     base = f"""
@@ -26,20 +26,20 @@ def get_item(item_id: int):
     rows = db.query(sql, [item_id])
     return rows[0] if rows else None
 
-def create_item(user_id, title, genre, description, year):
+def create_item(user_id, title, genre, age_rating, description, year):
     sql = """
-        INSERT INTO items (user_id, title, genre, description, year)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO items (user_id, title, genre, age_rating, description, year)
+        VALUES (?, ?, ?, ?, ?, ?)
     """
-    db.execute(sql, [user_id, title, genre, description, year])
+    db.execute(sql, [user_id, title, genre, age_rating, description, year])
 
-def update_item(item_id, title, genre, description, year):
+def update_item(item_id, title, genre, age_rating, description, year):
     sql = """
         UPDATE items
-           SET title = ?, genre = ?, description = ?, year = ?
+           SET title = ?, genre = ?, age_rating = ?, description = ?, year = ?
          WHERE id = ?
     """
-    db.execute(sql, [title, genre, description, year, item_id])
+    db.execute(sql, [title, genre, age_rating, description, year, item_id])
 
 def delete_item(item_id):
     db.execute("DELETE FROM items WHERE id = ?", [item_id])

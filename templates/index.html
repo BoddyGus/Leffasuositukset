@@ -47,6 +47,7 @@
           <strong><a href="{{ url_for('reviews_bp.items_show', item_id=item.id) }}">{{ item.title }}</a></strong>
           {% if item.year %} ({{ item.year }}){% endif %}
           {% if item.genre %} — {{ item.genre }}{% endif %}
+          {% if item.age_rating %} · Ikäraja: {{ item.age_rating }}{% endif %}
           <br />
           {% if item.description %}<em>{{ item.description }}</em><br />{% endif %}
           Lisännyt: {{ item.username }}
