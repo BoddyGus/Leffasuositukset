@@ -40,12 +40,11 @@ reviews_bp = Blueprint("reviews_bp", __name__)
 
 @reviews_bp.route("/")
 def index():
-    q = request.args.get("q", "").strip()
-    items = [dict(row) for row in list_items_query(q)]
-    # attach tags per item
+    search_query = request.args.get("q", "").strip()
+    items = [dict(row) for row in list_items_query(search_query)]
     for item in items:
         item["tags"] = list_tags_for_item(item["id"])
-    return render_template("index.html", items=items, q=q)
+    return render_template("index.html", items=items, q=search_query)
 
 
 @reviews_bp.route("/new_item")
