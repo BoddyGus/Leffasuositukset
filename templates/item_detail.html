@@ -28,6 +28,9 @@
 <p class="muted">
   {% if item.genre %}<strong>{{ item.genre }}</strong> · {% endif %}
   {% if age_rating_label %}Ikäraja: {{ age_rating_label }} · {% elif item.age_rating %}Ikäraja: {{ item.age_rating }} · {% endif %}
+  {% if item_tags and item_tags|length > 0 %}
+    Tunnisteet: {{ item_tags | map(attribute='name_fi') | join(', ') }} ·
+  {% endif %}
   Lisännyt: {{ item.user_id }} · {{ item.created_at }}
 </p>
 

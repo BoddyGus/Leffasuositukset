@@ -2,7 +2,13 @@ from flask import Blueprint, render_template, request, redirect, session, url_fo
 import db
 from user import current_username, current_user_id
 from queries.review_queries import list_reviews_for_item, get_avg_for_item, find_user_review, create_review
-from queries.item_queries import get_item
+from queries.item_queries import (
+    get_item,
+    list_items as list_items_query,
+    list_tags,
+    list_tags_for_item,
+    set_item_tags,
+)
 from queries.user_queries import find_user_id
 from app import check_csrf
 from flask import flash
@@ -35,26 +41,10 @@ reviews_bp = Blueprint("reviews_bp", __name__)
 @reviews_bp.route("/")
 def index():
     q = request.args.get("q", "").strip()
-    params = []
-    base_sql = """
-        SELECT i.id, i.title, i.genre, i.age_rating, i.description, i.year, i.user_id, i.created_at, u.username
-        FROM items i
-        JOIN users u ON u.id = i.user_id
-    """
-    if q:
-        sql = base_sql + """
-            WHERE i.title LIKE ?
-               OR i.genre LIKE ?
-               OR i.age_rating LIKE ?
-               OR CAST(i.year AS TEXT) LIKE ?
-            ORDER BY i.created_at DESC
-        """
-        like = f"%{q}%"
-        params = [like, like, like, like]
-    else:
-        sql = base_sql + " ORDER BY i.created_at DESC"
-
-    items = db.query(sql, params)
+    items = [dict(row) for row in list_items_query(q)]
+    # attach tags per item
+    for item in items:
+        item["tags"] = list_tags_for_item(item["id"])
     return render_template("index.html", items=items, q=q)
 
 
@@ -62,7 +52,8 @@ def index():
 def new_item():
     if not current_username():
         return redirect(url_for("user_bp.login"))
-    return render_template("new_item.html", allowed_genres=ALLOWED_GENRES)
+    tags = list_tags()
+    return render_template("new_item.html", allowed_genres=ALLOWED_GENRES, tags=tags)
 
 
 @reviews_bp.route("/items/create", methods=["POST"])
@@ -76,6 +67,7 @@ def items_create():
     age_rating = request.form.get("age_rating", "").strip()
     year = request.form.get("year", "").strip()
     description = request.form.get("description", "").strip()
+    tag_ids_raw = request.form.getlist("tags")
 
     if not title:
         return "VIRHE: nimi puuttuu"
@@ -98,11 +90,19 @@ def items_create():
     if age_rating and age_rating not in ALLOWED_AGE_RATINGS:
         return "VIRHE: ikäraja ei ole sallittu. Sallitut: " + ", ".join(ALLOWED_AGE_RATINGS.keys())
 
+    # Validate tags
+    all_tags = {str(t["id"]): t for t in list_tags()}
+    for tid in tag_ids_raw:
+        if tid not in all_tags:
+            return "VIRHE: tuntematon tunniste tagille"
+
     sql = """
         INSERT INTO items (user_id, title, genre, age_rating, description, year)
         VALUES (?, ?, ?, ?, ?, ?)
     """
     db.execute(sql, [uid, title, genre, age_rating, description, yval])
+    item_id = db.last_insert_id()
+    set_item_tags(item_id, [int(tid) for tid in tag_ids_raw])
     return redirect(url_for("reviews_bp.index"))
 
 
@@ -122,7 +122,10 @@ def items_edit(item_id):
     if item["user_id"] != current_user_id():
         return "VIRHE: ei oikeuksia muokata"
 
-    return render_template("edit_item.html", item=item, allowed_genres=ALLOWED_GENRES)
+    tags = list_tags()
+    selected_tags = list_tags_for_item(item_id)
+    selected_ids = {t["id"] for t in selected_tags}
+    return render_template("edit_item.html", item=item, allowed_genres=ALLOWED_GENRES, tags=tags, selected_tag_ids=selected_ids)
 
 
 @reviews_bp.route("/items/<int:item_id>/update", methods=["POST"])
@@ -142,6 +145,7 @@ def items_update(item_id):
     age_rating = request.form.get("age_rating", "").strip()
     year = request.form.get("year", "").strip()
     description = request.form.get("description", "").strip()
+    tag_ids_raw = request.form.getlist("tags")
 
     if not title:
         return "VIRHE: nimi puuttuu"
@@ -160,12 +164,18 @@ def items_update(item_id):
     if age_rating and age_rating not in ALLOWED_AGE_RATINGS:
         return "VIRHE: ikäraja ei ole sallittu. Sallitut: " + ", ".join(ALLOWED_AGE_RATINGS.keys())
 
+    all_tags = {str(t["id"]): t for t in list_tags()}
+    for tid in tag_ids_raw:
+        if tid not in all_tags:
+            return "VIRHE: tuntematon tunniste tagille"
+
         sql = """
                 UPDATE items
                      SET title = ?, genre = ?, age_rating = ?, description = ?, year = ?
                  WHERE id = ?
         """
         db.execute(sql, [title, genre, age_rating, description, yval, item_id])
+        set_item_tags(item_id, [int(tid) for tid in tag_ids_raw])
     return redirect(url_for("reviews_bp.index"))
 
 
@@ -186,10 +196,16 @@ def items_delete(item_id):
 
 @reviews_bp.route("/items/<int:item_id>")
 def items_show(item_id):
-    item = get_item(item_id)
+    row = get_item(item_id)
+    if row:
+        item = dict(row)
+    else:
+        item = None
     if not item:
         flash("Kohdetta ei löytynyt", "error")
         return redirect(url_for("reviews_bp.index"))
+
+    item_tags = list_tags_for_item(item_id)
 
     reviews = list_reviews_for_item(item_id)
     avg = get_avg_for_item(item_id)
@@ -208,6 +224,7 @@ def items_show(item_id):
         "item_detail.html",
         item=item,
         age_rating_label=rating_label,
+        item_tags=item_tags,
         reviews=reviews,
         avg_rating=avg["avg_rating"],
         review_count=avg["review_count"],

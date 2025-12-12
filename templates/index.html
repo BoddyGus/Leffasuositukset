@@ -36,7 +36,7 @@
   </p>
 
   <form action="/" method="get" style="margin: 1em 0;">
-    <input type="text" name="q" placeholder="Hae nimellä, tyylilajilla, ikärajalla tai vuodella" value="{{ q or '' }}" style="width: 420px;" />
+    <input type="text" name="q" placeholder="Hae nimellä, tyylilajilla, ikärajalla, tunnisteilla, kuvauksella tai vuodella" value="{{ q or '' }}" style="width: 520px;" />
     <input type="submit" value="Hae" />
   </form>
 
@@ -48,6 +48,10 @@
           {% if item.year %} ({{ item.year }}){% endif %}
           {% if item.genre %} — {{ item.genre }}{% endif %}
           {% if item.age_rating %} · Ikäraja: {{ item.age_rating }}{% endif %}
+          {% if item.tags and item.tags|length > 0 %}
+            <br />
+            <span style="font-size: 0.95em;">Tunnisteet: {{ item.tags | map(attribute='name_fi') | join(', ') }}</span>
+          {% endif %}
           <br />
           {% if item.description %}<em>{{ item.description }}</em><br />{% endif %}
           Lisännyt: {{ item.username }}

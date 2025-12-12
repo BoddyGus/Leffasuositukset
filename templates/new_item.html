@@ -23,6 +23,14 @@
       </select>
     </p>
     <p>
+      Tunnisteet (tunnelma): <br />
+      {% for t in tags %}
+        <label style="display:block;">
+          <input type="checkbox" name="tags" value="{{ t.id }}" /> {{ t.name_fi }}
+        </label>
+      {% endfor %}
+    </p>
+    <p>
       Ikäraja: <br />
       <select name="age_rating" required>
         <option value="" disabled selected>-- valitse ikäraja --</option>
