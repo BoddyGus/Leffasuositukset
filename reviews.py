@@ -45,7 +45,7 @@ def index():
         sql = base_sql + """
             WHERE i.title LIKE ?
                OR i.genre LIKE ?
-               OR i.description LIKE ?
+               OR i.age_rating LIKE ?
                OR CAST(i.year AS TEXT) LIKE ?
             ORDER BY i.created_at DESC
         """
