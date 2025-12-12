@@ -91,7 +91,7 @@ def items_create():
     if age_rating and age_rating not in ALLOWED_AGE_RATINGS:
         return "VIRHE: ikäraja ei ole sallittu. Sallitut: " + ", ".join(ALLOWED_AGE_RATINGS.keys())
 
-    # Validate tags
+    
     all_tags = {str(t["id"]): t for t in list_tags()}
     for tid in tag_ids_raw:
         if tid not in all_tags:

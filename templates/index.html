@@ -59,7 +59,6 @@
           <br />
           {% if session.username %}
             {% if item.user_id == (db_user_id | default(None)) %}
-              {# fallback if you render user id; not used now #}
             {% endif %}
             {% if session.username == item.username %}
               <form action="/items/{{ item.id }}/delete" method="post" style="display:inline;">
