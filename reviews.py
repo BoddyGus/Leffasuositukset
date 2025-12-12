@@ -75,9 +75,11 @@ def items_create():
         return "VIRHE: genre on pakollinen"
     if not age_rating:
         return "VIRHE: ikäraja on pakollinen"
+    if not year:
+        return "VIRHE: vuosi on pakollinen"
 
     try:
-        yval = int(year) if year else None
+        yval = int(year)
     except ValueError:
         return "VIRHE: vuosi ei ole numero"
 
@@ -153,9 +155,11 @@ def items_update(item_id):
         return "VIRHE: genre on pakollinen"
     if not age_rating:
         return "VIRHE: ikäraja on pakollinen"
+    if not year:
+        return "VIRHE: vuosi on pakollinen"
 
     try:
-        yval = int(year) if year else None
+        yval = int(year)
     except ValueError:
         return "VIRHE: vuosi ei ole numero"
 
