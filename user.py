@@ -23,11 +23,14 @@ def current_user_id():
 
 @user_bp.route("/register")
 def register():
+    if not session.get("csrf_token"):
+        session["csrf_token"] = secrets.token_hex(16)
     return render_template("register.html")
 
 
 @user_bp.route("/create", methods=["POST"])
 def create():
+    check_csrf()
     username = request.form["username"].strip()
     password1 = request.form["password1"]
     password2 = request.form["password2"]
@@ -54,7 +57,10 @@ def create():
 @user_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
+        if not session.get("csrf_token"):
+            session["csrf_token"] = secrets.token_hex(16)
         return render_template("login.html")
+    check_csrf()
     username = request.form["username"].strip()
     password = request.form["password"]
 

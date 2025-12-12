@@ -19,6 +19,7 @@
   {% endwith %}
 
   <form action="/create" method="post">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <h1>Luo uusi tunnus</h1>
     <p>
       Tunnus: <br />
