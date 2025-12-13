@@ -77,8 +77,6 @@
           {% if item.created_at %} | Lisätty: {{ item.created_at }}{% endif %}
           <br />
           {% if session.username %}
-            {% if item.user_id == (db_user_id | default(None)) %}
-            {% endif %}
             {% if session.username == item.username %}
               <form action="/items/{{ item.id }}/delete" method="post" style="display:inline;">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
