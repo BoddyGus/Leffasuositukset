@@ -214,13 +214,13 @@ def items_update(item_id):
         if tid not in all_tags:
             return "VIRHE: tuntematon tunniste tagille"
 
-        sql = """
-                UPDATE items
-                     SET title = ?, genre = ?, age_rating = ?, description = ?, year = ?
-                 WHERE id = ?
+    sql = """
+        UPDATE items
+            SET title = ?, genre = ?, age_rating = ?, description = ?, year = ?
+         WHERE id = ?
         """
-        db.execute(sql, [title, genre, age_rating, description, yval, item_id])
-        set_item_tags(item_id, [int(tid) for tid in tag_ids_raw])
+    db.execute(sql, [title, genre, age_rating, description, yval, item_id])
+    set_item_tags(item_id, [int(tid) for tid in tag_ids_raw])
     return redirect(url_for("reviews_bp.index"))
 
 
