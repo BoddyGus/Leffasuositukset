@@ -13,7 +13,10 @@ def list_reviews_for_item(item_id: int):
     return db.query(sql, [item_id])
 
 def get_avg_for_item(item_id: int):
-    sql = "SELECT AVG(rating) AS avg_rating, COUNT(*) AS review_count FROM item_reviews WHERE item_id = ?"
+    sql = (
+        "SELECT AVG(rating) AS avg_rating, COUNT(*) AS review_count "
+        "FROM item_reviews WHERE item_id = ?"
+    )
     rows = db.query(sql, [item_id])
     return rows[0] if rows else {"avg_rating": None, "review_count": 0}
 

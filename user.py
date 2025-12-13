@@ -86,11 +86,17 @@ def profile(username):
     movie_count = count_rows[0]["movie_count"] if count_rows else 0
 
     movies = db.query(
-        "SELECT id, title, genre, year, created_at FROM items WHERE user_id = ? ORDER BY created_at DESC",
-        [uid]
+        "SELECT id, title, genre, year, created_at FROM items "
+        "WHERE user_id = ? ORDER BY created_at DESC",
+        [uid],
     )
 
-    return render_template("user_profile.html", username=username, movie_count=movie_count, movies=movies)
+    return render_template(
+        "user_profile.html",
+        username=username,
+        movie_count=movie_count,
+        movies=movies,
+    )
 @user_bp.route("/logout")
 def logout():
     session.pop("username", None)

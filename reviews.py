@@ -2,7 +2,12 @@ from flask import Blueprint, render_template, request, redirect, session, url_fo
 from datetime import datetime
 import db
 from user import current_username, current_user_id
-from queries.review_queries import list_reviews_for_item, get_avg_for_item, find_user_review, create_review
+from queries.review_queries import (
+    list_reviews_for_item,
+    get_avg_for_item,
+    find_user_review,
+    create_review,
+)
 from queries.item_queries import (
     get_item,
     list_items as list_items_query,
@@ -54,7 +59,12 @@ def new_item():
         return redirect(url_for("user_bp.login"))
     tags = list_tags()
     current_year = datetime.now().year
-    return render_template("new_item.html", allowed_genres=ALLOWED_GENRES, tags=tags, current_year=current_year)
+    return render_template(
+        "new_item.html",
+        allowed_genres=ALLOWED_GENRES,
+        tags=tags,
+        current_year=current_year,
+    )
 
 
 @reviews_bp.route("/items/create", methods=["POST"])
@@ -125,8 +135,9 @@ def items_edit(item_id):
         return redirect(url_for("user_bp.login"))
 
     rows = db.query(
-    "SELECT id, user_id, title, genre, age_rating, description, year, created_at FROM items WHERE id = ?",
-    [item_id]
+        "SELECT id, user_id, title, genre, age_rating, description, year, created_at "
+        "FROM items WHERE id = ?",
+        [item_id],
     )
 
     if not rows:
@@ -139,7 +150,14 @@ def items_edit(item_id):
     selected_tags = list_tags_for_item(item_id)
     selected_ids = {t["id"] for t in selected_tags}
     current_year = datetime.now().year
-    return render_template("edit_item.html", item=item, allowed_genres=ALLOWED_GENRES, tags=tags, selected_tag_ids=selected_ids, current_year=current_year)
+    return render_template(
+        "edit_item.html",
+        item=item,
+        allowed_genres=ALLOWED_GENRES,
+        tags=tags,
+        selected_tag_ids=selected_ids,
+        current_year=current_year,
+    )
 
 
 @reviews_bp.route("/items/<int:item_id>/update", methods=["POST"])
