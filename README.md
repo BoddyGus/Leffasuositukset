@@ -1,52 +1,51 @@
-# Leffasuositukset
+# Movie Recommendations
+Movie Recommendations is a web application where users can share movie tips and rate movies added by others.
+The application is implemented in Python using the Flask library, and data is stored in an SQLite database.
 
-Leffasuositukset on web-sovellus, jossa käyttäjät voivat jakaa elokuvavinkkejä ja arvioida muiden lisäämiä elokuvia.
-Sovellus on toteutettu Python-kielellä käyttäen Flask-kirjastoa, ja tiedot tallennetaan SQLite-tietokantaan.
+## Features
 
-## Sovelluksen toiminnot
+- A user can create an account and log in to the application.
+- A user can add new movies to the application (title, genre, description, year).
+- A user can edit and delete the movies they have added.
+- A user can see all movies added to the application, both their own and those added by other users.
+- A user can search for movies with a keyword (for example based on the movie title or genre).
+- On the user page, statistics are shown such as how many movies the user has added and a list of the movies they have added.
+- A user can assign one or more categories to a movie (e.g. action, comedy, drama, horror).
+- A user can add reviews (a comment and a rating) to their own and others’ movies.
+- For each movie, all related reviews and the average rating are shown.
 
-- Käyttäjä voi luoda tunnuksen ja kirjautua sisään sovellukseen.
-- Käyttäjä voi lisätä uusia elokuvia sovellukseen (nimi, genre, kuvaus, vuosi).
-- Käyttäjä voi muokata ja poistaa itse lisäämiään elokuvia.
-- Käyttäjä näkee sovellukseen lisätyt elokuvat sekä itse että muiden käyttäjien lisäämät.
-- Käyttäjä voi hakea elokuvia hakusanalla (esimerkiksi elokuvan nimen tai genren perusteella).
-- Käyttäjäsivulla näytetään tilastoja, kuten kuinka monta elokuvaa käyttäjä on lisännyt ja lista hänen lisäämistään elokuvista.
-- Käyttäjä voi valita elokuvalle yhden tai useamman luokittelun (esim. toiminta, komedia, draama, kauhu).
-- Käyttäjä voi lisätä arvosteluja (kommentin ja arvosanan) omiin ja muiden lisäämiin elokuviin.
-- Elokuvasta näytetään kaikki siihen liittyvät arvostelut sekä keskimääräinen arvosana.
+## Data Entities
 
-## Tietokohteet
+- **Movie**
+  The main data entity, containing the basic information of a movie (title, genre, description, year).
 
-- **Elokuva**
-  Pääasiallinen tietokohde, joka sisältää elokuvan perustiedot (nimi, genre, kuvaus, vuosi).
+- **Review**
+  A secondary data entity, containing the comment and rating given by a user for a specific movie.
 
-- **Arvostelu**
-  Toissijainen tietokohde, joka sisältää käyttäjän antaman kommentin ja arvosanan tietylle elokuvalle.
+## Technical Details
 
-## Tekniset tiedot
+- The application is implemented in Python using the Flask library.
+- The database is SQLite.
+- The application uses raw SQL commands to interact with the database.
+- The user interface consists of HTML pages and custom CSS.
+- The application does not use JavaScript.
+- Version control is handled with Git, and the code is published on GitHub.
 
-- Sovellus on toteutettu Pythonilla käyttäen Flask-kirjastoa.
-- Tietokantana toimii SQLite.
-- Sovellus käyttää suoria SQL-komentoja tietokannan käsittelyyn.
-- Käyttöliittymä koostuu HTML-sivuista ja itse toteutetusta CSS:stä.
-- Sovelluksessa ei käytetä JavaScriptiä.
-- Versionhallinta on toteutettu Gitillä, ja koodi on julkaistu GitHubissa.
+## Installation
 
-## Sovelluksen asennus
-
-Asenna `flask`-kirjasto:
+Install the `flask`-library:
 
 ```
 $ pip install flask
 ```
 
-Luo tietokannan taulut ja lisää alkutiedot:
+Create the database tables and insert initial data:
 
 ```
 $ sqlite3 database.db < schema.sql
 ```
 
-Voit käynnistää sovelluksen näin:
+You can start the application with:
 
 ```
 $ flask run
