@@ -11,7 +11,7 @@
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <p>
       Nimi: <br />
-      <input type="text" name="title" value="{{ item.title }}" required />
+      <input type="text" name="title" value="{{ item.title }}" required maxlength="75" />
     </p>
     <p>
       Tyylilaji (genre): <br />
@@ -43,7 +43,7 @@
     </p>
     <p>
       Vuosi: <br />
-      <input type="number" name="year" min="1888" max="2100" value="{{ item.year or '' }}" required />
+      <input type="number" name="year" min="1888" max="{{ current_year }}" value="{{ item.year or '' }}" required />
     </p>
     <p>
       Kuvaus: <br />

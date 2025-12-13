@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, session, url_for
+from datetime import datetime
 import db
 from user import current_username, current_user_id
 from queries.review_queries import list_reviews_for_item, get_avg_for_item, find_user_review, create_review
@@ -52,7 +53,8 @@ def new_item():
     if not current_username():
         return redirect(url_for("user_bp.login"))
     tags = list_tags()
-    return render_template("new_item.html", allowed_genres=ALLOWED_GENRES, tags=tags)
+    current_year = datetime.now().year
+    return render_template("new_item.html", allowed_genres=ALLOWED_GENRES, tags=tags, current_year=current_year)
 
 
 @reviews_bp.route("/items/create", methods=["POST"])
@@ -82,6 +84,14 @@ def items_create():
     except ValueError:
         return "VIRHE: vuosi ei ole numero"
 
+    MAX_TITLE_LEN = 75
+    if len(title) > MAX_TITLE_LEN:
+        return f"VIRHE: nimi on liian pitkä (max {MAX_TITLE_LEN} merkkiä)"
+
+    current_year = datetime.now().year
+    if yval > current_year:
+        return f"VIRHE: vuosi ei voi olla tulevaisuudessa (max {current_year})"
+
     uid = current_user_id()
     if not uid:
         return "VIRHE: käyttäjää ei löytynyt"
@@ -91,7 +101,6 @@ def items_create():
     if age_rating and age_rating not in ALLOWED_AGE_RATINGS:
         return "VIRHE: ikäraja ei ole sallittu. Sallitut: " + ", ".join(ALLOWED_AGE_RATINGS.keys())
 
-    
     all_tags = {str(t["id"]): t for t in list_tags()}
     for tid in tag_ids_raw:
         if tid not in all_tags:
@@ -126,7 +135,8 @@ def items_edit(item_id):
     tags = list_tags()
     selected_tags = list_tags_for_item(item_id)
     selected_ids = {t["id"] for t in selected_tags}
-    return render_template("edit_item.html", item=item, allowed_genres=ALLOWED_GENRES, tags=tags, selected_tag_ids=selected_ids)
+    current_year = datetime.now().year
+    return render_template("edit_item.html", item=item, allowed_genres=ALLOWED_GENRES, tags=tags, selected_tag_ids=selected_ids, current_year=current_year)
 
 
 @reviews_bp.route("/items/<int:item_id>/update", methods=["POST"])
@@ -161,6 +171,14 @@ def items_update(item_id):
         yval = int(year)
     except ValueError:
         return "VIRHE: vuosi ei ole numero"
+
+    MAX_TITLE_LEN = 75
+    if len(title) > MAX_TITLE_LEN:
+        return f"VIRHE: nimi on liian pitkä (max {MAX_TITLE_LEN} merkkiä)"
+
+    current_year = datetime.now().year
+    if yval > current_year:
+        return f"VIRHE: vuosi ei voi olla tulevaisuudessa (max {current_year})"
 
     if genre and genre not in ALLOWED_GENRES:
         return "VIRHE: genre ei ole sallittu. Sallitut genret: " + ", ".join(ALLOWED_GENRES)
