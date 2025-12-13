@@ -31,9 +31,11 @@ def list_items(search: str):
 
 def get_item(item_id: int):
     sql = """
-        SELECT id, user_id, title, genre, age_rating, description, year, created_at
-          FROM items
-         WHERE id = ?
+        SELECT i.id, i.user_id, i.title, i.genre, i.age_rating,
+               i.description, i.year, i.created_at, u.username
+          FROM items i
+          JOIN users u ON u.id = i.user_id
+         WHERE i.id = ?
     """
     rows = db.query(sql, [item_id])
     return rows[0] if rows else None

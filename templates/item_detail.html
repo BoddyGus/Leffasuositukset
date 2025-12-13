@@ -35,7 +35,7 @@
   {% if item_tags and item_tags|length > 0 %}
     Tunnisteet: {{ item_tags | map(attribute='name_fi') | join(', ') }} ·
   {% endif %}
-  Lisännyt: {{ item.user_id }} · {{ item.created_at }}
+  Lisännyt: <a href="{{ url_for('user_bp.profile', username=item.username) }}">{{ item.username }}</a> · {{ item.created_at }}
 </p>
 
 {% if item.description %}
