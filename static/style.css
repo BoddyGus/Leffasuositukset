@@ -1,0 +1,252 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+    color: #333;
+    background-color: #fff;
+    margin: 0 auto;
+    max-width: 900px;
+    padding: 0 20px;
+}
+
+h1 {
+    margin: 1em 0 0.5em 0;
+    font-size: 2em;
+    color: #333;
+    text-align: center;
+}
+
+h2 {
+    margin: 1em 0 0.5em 0;
+    font-size: 1.5em;
+    color: #333;
+}
+
+h3 {
+    margin: 0.8em 0 0.3em 0;
+    font-size: 1.2em;
+    color: #555;
+}
+
+a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+form {
+    margin: 1em 0;
+    padding: 0;
+}
+
+form p {
+    margin: 1em 0;
+}
+
+form label {
+    display: block;
+    margin: 0.5em 0 0.3em 0;
+    font-weight: bold;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="number"],
+form select,
+form textarea {
+    width: 100%;
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    font-family: Arial, sans-serif;
+}
+
+form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+form input[type="submit"],
+form input[type="button"] {
+    padding: 0.6em 1.2em;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-right: 0.5em;
+    margin-top: 1em;
+}
+
+form input[type="submit"]:hover,
+form input[type="button"]:hover {
+    background-color: #0052a3;
+}
+
+form input[type="checkbox"] {
+    margin-right: 0.3em;
+}
+
+form input[type="checkbox"] + label {
+    display: inline;
+    margin: 0;
+    font-weight: normal;
+}
+
+ul {
+    list-style: none;
+    margin: 1em 0;
+    padding: 0;
+}
+
+ul li {
+    margin: 1.5em 0;
+    padding: 1em;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    background-color: #fafafa;
+}
+
+ul li strong {
+    display: block;
+    font-size: 1.1em;
+    margin-bottom: 0.3em;
+}
+
+ul li strong a {
+    color: #0066cc;
+}
+
+ul li em {
+    display: block;
+    margin: 0.5em 0;
+    color: #666;
+    font-style: italic;
+}
+
+ul li form {
+    margin-top: 0.8em;
+    padding-top: 0.8em;
+    border-top: 1px solid #ddd;
+    display: inline-flex;
+    gap: 0.5em;
+    align-items: center;
+}
+
+ul li form a {
+    padding: 0 1.5em;
+    background-color: #0066cc;
+    color: white;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1em;
+    height: 44px;
+    white-space: nowrap;
+}
+
+ul li form a:hover {
+    background-color: #0052a3;
+    text-decoration: none;
+}
+
+ul li form input[type="submit"] {
+    margin: 0;
+    padding: 0 1.5em;
+    font-size: 1em;
+    background-color: #cc0000;
+    height: 44px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+ul li form input[type="submit"]:hover {
+    background-color: #990000;
+}
+
+form[method="get"] {
+    margin: 1.5em 0;
+    display: flex;
+    gap: 0.5em;
+}
+
+form[method="get"] input[type="text"] {
+    flex: 1;
+    width: 100%;
+    min-width: 200px;
+}
+
+form[method="get"] input[type="submit"] {
+    width: auto;
+    margin: 0;
+    padding: 0.5em 1em;
+}
+
+section {
+    margin: 1.5em 0;
+    padding: 1em;
+    background-color: #f0f0f0;
+    border-left: 4px solid #0066cc;
+    border-radius: 4px;
+}
+
+section h2 {
+    margin-top: 0;
+}
+
+section ul {
+    margin-left: 1.5em;
+}
+
+section li {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0.5em 0;
+}
+
+small {
+    display: block;
+    color: #999;
+    font-size: 0.9em;
+    margin-top: 0.2em;
+}
+
+li[style*="color:"] {
+    list-style: none;
+    padding: 0.8em;
+    margin: 0.5em 0;
+    border-radius: 4px;
+    border-left: 4px solid #ccc;
+}
+
+hr {
+    margin: 1.5em 0;
+    border: none;
+    border-top: 1px solid #ddd;
+}
+
+body > p:first-of-type {
+    text-align: center;
+    margin: 0.5em 0;
+    font-weight: bold;
+}
+
+body > p {
+    text-align: center;
+}

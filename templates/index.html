@@ -3,6 +3,7 @@
 <head>
   <title>Leffasuositukset</title>
   <meta charset="utf-8" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
   {% with messages = get_flashed_messages(with_categories=True) %}
