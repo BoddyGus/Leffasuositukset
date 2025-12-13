@@ -26,8 +26,6 @@
   {% endif %}
 {% endwith %}
 
-<p><a href="{{ url_for('reviews_bp.index') }}">← Takaisin etusivulle</a></p>
-
 <h1>{{ item.title }}{% if item.year %} ({{ item.year }}){% endif %}</h1>
 <p class="muted">
   {% if item.genre %}<strong>{{ item.genre }}</strong> · {% endif %}
