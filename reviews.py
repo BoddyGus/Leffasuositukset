@@ -101,6 +101,9 @@ def items_create():
     if age_rating and age_rating not in ALLOWED_AGE_RATINGS:
         return "VIRHE: ikäraja ei ole sallittu. Sallitut: " + ", ".join(ALLOWED_AGE_RATINGS.keys())
 
+    if description and len(description) > 250:
+        return "VIRHE: kuvaus on liian pitkä (max 250 merkkiä)"
+
     all_tags = {str(t["id"]): t for t in list_tags()}
     for tid in tag_ids_raw:
         if tid not in all_tags:
@@ -185,6 +188,9 @@ def items_update(item_id):
     if age_rating and age_rating not in ALLOWED_AGE_RATINGS:
         return "VIRHE: ikäraja ei ole sallittu. Sallitut: " + ", ".join(ALLOWED_AGE_RATINGS.keys())
 
+    if description and len(description) > 250:
+        return "VIRHE: kuvaus on liian pitkä (max 250 merkkiä)"
+
     all_tags = {str(t["id"]): t for t in list_tags()}
     for tid in tag_ids_raw:
         if tid not in all_tags:
@@ -265,7 +271,7 @@ def reviews_create(item_id):
         return redirect(url_for("user_bp.login"))
 
     rating_raw = request.form.get("rating", "").strip()
-    comment = request.form.get("comment", "")
+    comment = request.form.get("comment", "").strip()
 
     try:
         rating = int(rating_raw)
@@ -275,6 +281,10 @@ def reviews_create(item_id):
 
     if rating < 1 or rating > 5:
         flash("Arvosanan tulee olla 1–5", "error")
+        return redirect(url_for("reviews_bp.items_show", item_id=item_id))
+
+    if comment and len(comment) > 250:
+        flash("Kommentti on liian pitkä (max 250 merkkiä)", "error")
         return redirect(url_for("reviews_bp.items_show", item_id=item_id))
 
     if find_user_review(item_id, uid):

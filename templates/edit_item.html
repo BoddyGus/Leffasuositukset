@@ -47,7 +47,7 @@
     </p>
     <p>
       Kuvaus: <br />
-      <textarea name="description" rows="4" cols="40">{{ item.description or '' }}</textarea>
+      <textarea name="description" rows="4" cols="40" maxlength="250">{{ item.description or '' }}</textarea>
     </p>
     <input type="submit" value="Päivitä" />
     <a href="/">Peruuta</a>
