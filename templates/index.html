@@ -68,7 +68,7 @@
             <span style="font-size: 0.95em;">Tunnisteet: {{ item.tags | map(attribute='name_fi') | join(', ') }}</span>
           {% endif %}
           <br />
-          {% if item.description %}<em>{{ item.description }}</em><br />{% endif %}
+          {% if item.description %}<em>{{ item.description | show_lines }}</em><br />{% endif %}
           Lisännyt: <a href="{{ url_for('user_bp.profile', username=item.username) }}">{{ item.username }}</a>
           {% if item.created_at %} | Lisätty: {{ item.created_at }}{% endif %}
           <br />

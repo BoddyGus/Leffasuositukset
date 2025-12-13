@@ -1,4 +1,5 @@
 from flask import Flask, request, session, abort
+import markupsafe
 import config
 
 def check_csrf():
@@ -9,6 +10,13 @@ def check_csrf():
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+
+
+@app.template_filter()
+def show_lines(content):
+    content = str(markupsafe.escape(content))
+    content = content.replace("\n", "<br />")
+    return markupsafe.Markup(content)
 
 from user import init_user
 from reviews import init_reviews
