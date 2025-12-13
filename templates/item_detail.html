@@ -52,7 +52,7 @@
 <ul>
   {% for r in reviews %}
     <li style="margin-bottom: 0.6em;">
-      <strong>{{ r.username }}</strong> antoi {{ r.rating }} / 5
+      <strong><a href="{{ url_for('user_bp.profile', username=r.username) }}">{{ r.username }}</a></strong> antoi {{ r.rating }} / 5
       <div class="multiline">{{ r.comment or '' }}</div>
       <span class="muted">{{ r.created_at }}</span>
     </li>
