@@ -129,6 +129,7 @@ queries/item_queries.py:1:0: R0401: Cyclic import (app -> user) (cyclic-import)
 
 ------------------------------------------------------------------
 Your code has been rated at 8.03/10 (previous run: 8.03/10, +0.00)
+```
 
 ## Missing docstrings
 
