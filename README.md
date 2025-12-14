@@ -69,4 +69,4 @@ For testing the application with a larger amount of data, you can:
 
   You can edit the default numbers in `seed.py` if you want to test with smaller or larger datasets.
 
-The front page uses server-side pagination (20 movies per page) when listing movies. The search field and page number (`page` parameter in the URL) can be used together, so you can test how searching and paging behave with large datasets.
+The front page uses server-side pagination (6 movies per page) when listing movies. The search field and page number (`page` parameter in the URL) can be used together, so you can test how searching and paging behave with large datasets.
