@@ -118,6 +118,8 @@ def items_create():
 
     if description and len(description) > 350:
         return "VIRHE: kuvaus on liian pitkä (max 350 merkkiä)"
+    if description and description.count("\n") > 9:
+        return "VIRHE: kuvaus saa sisältää enintään 10 riviä"
 
     all_tags = {str(t["id"]): t for t in list_tags()}
     for tid in tag_ids_raw:
@@ -213,6 +215,8 @@ def items_update(item_id):
 
     if description and len(description) > 350:
         return "VIRHE: kuvaus on liian pitkä (max 350 merkkiä)"
+    if description and description.count("\n") > 9:
+        return "VIRHE: kuvaus saa sisältää enintään 10 riviä"
 
     all_tags = {str(t["id"]): t for t in list_tags()}
     for tid in tag_ids_raw:
@@ -308,6 +312,9 @@ def reviews_create(item_id):
 
     if comment and len(comment) > 350:
         flash("Kommentti on liian pitkä (max 350 merkkiä)", "error")
+        return redirect(url_for("reviews_bp.items_show", item_id=item_id))
+    if comment and comment.count("\n") > 9:
+        flash("Kommentti saa sisältää enintään 10 riviä", "error")
         return redirect(url_for("reviews_bp.items_show", item_id=item_id))
 
     if find_user_review(item_id, uid):
