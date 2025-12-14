@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tietoa sovelluksesta</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <a href="{{ url_for('reviews_bp.index') }}" class="home-link">
+    <img src="{{ url_for('static', filename='home-icon.svg') }}" alt="Home" class="home-icon" />
+  </a>
+
+  <h1>Leffasuositukset</h1>
+
+  <section class="about-section">
+    <h2>Sovelluksesta</h2>
+    <p>
+      Leffasuositukset on yhteisöllinen elokuvien arvostelualusta, jossa voit jakaa suosiksiesi elokuvia ja löytää uusia suosituksia muilta käyttäjiltä.
+    </p>
+    <h3>Pääominaisuudet:</h3>
+    <ul>
+      <li>Lisää ja hallinnoi elokuvalistaasi — tallenna elokuvan nimen, vuoden, genren ja kuvauksen.</li>
+      <li>Luokittele elokuvasi — valitse genre, ikäraja ja tunnisteet (tunnelma) kuvaamaan elokuvaa.</li>
+      <li>Arvioi muiden käyttäjien elokuvia — anna arvosana (1–5) ja kirjoita kommenttisi.</li>
+      <li>Hae ja löydä elokuvia — etsi nimellä, genrellä, ikärajalla, tunnisteilla, kuvauksella tai vuodella.</li>
+      <li>Katso käyttäjäprofiili — tarkastele tilastoja ja löydä tietyn käyttäjän lisäämät elokuvat.</li>
+    </ul>
+  </section>
+
+  <p class="nav-links">
+    <a href="{{ url_for('reviews_bp.index') }}">Etusivu</a>
+    {% if not session.username %}
+      | <a href="{{ url_for('user_bp.register') }}">Rekisteröidy</a>
+      | <a href="{{ url_for('user_bp.login') }}">Kirjaudu</a>
+    {% else %}
+      | <a href="{{ url_for('user_bp.profile', username=session.username) }}">Profiili</a>
+      | <a href="/logout">Kirjaudu ulos</a>
+      | <a href="/new_item">Lisää uusi elokuva</a>
+    {% endif %}
+  </p>
+</body>
+</html>

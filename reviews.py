@@ -53,6 +53,11 @@ def index():
     return render_template("index.html", items=items, q=search_query)
 
 
+@reviews_bp.route("/about")
+def about():
+    return render_template("about.html")
+
+
 @reviews_bp.route("/new_item")
 def new_item():
     if not current_username():
