@@ -16,6 +16,8 @@ CREATE TABLE items (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE INDEX IF NOT EXISTS idx_items_user ON items(user_id);
+
 CREATE TABLE IF NOT EXISTS item_reviews (
     id INTEGER PRIMARY KEY,
     item_id INTEGER NOT NULL,

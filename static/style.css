@@ -344,3 +344,22 @@ body > p {
     margin: 0 0.25em;
     font-weight: bold;
 }
+
+.pagination {
+    margin: 1.5em 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}
+
+.pagination a {
+    color: #0066cc;
+    font-weight: bold;
+}
+
+.pagination-info {
+    font-size: 0.95em;
+    color: #555;
+}

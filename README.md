@@ -50,3 +50,23 @@ You can start the application with:
 ```
 $ flask run
 ```
+
+## Large Dataset Testing and Pagination
+
+For testing the application with a larger amount of data, you can:
+
+1. Recreate the database (this also adds an index on `items.user_id`):
+
+  ```
+  $ sqlite3 database.db < schema.sql
+  ```
+
+2. Generate a large test dataset using the provided `seed.py` script. The default values create roughly 200 users, 5000 movies and 20000 reviews:
+
+  ```
+  $ python seed.py
+  ```
+
+  You can edit the default numbers in `seed.py` if you want to test with smaller or larger datasets.
+
+The front page uses server-side pagination (20 movies per page) when listing movies. The search field and page number (`page` parameter in the URL) can be used together, so you can test how searching and paging behave with large datasets.

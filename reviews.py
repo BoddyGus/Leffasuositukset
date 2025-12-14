@@ -47,10 +47,82 @@ reviews_bp = Blueprint("reviews_bp", __name__)
 @reviews_bp.route("/")
 def index():
     search_query = request.args.get("q", "").strip()
-    items = [dict(row) for row in list_items_query(search_query)]
+
+    try:
+        page = int(request.args.get("page", "1"))
+    except ValueError:
+        page = 1
+
+    if page < 1:
+        page = 1
+
+    PER_PAGE = 6
+    offset = (page - 1) * PER_PAGE
+
+    sql = """
+        SELECT i.id, i.user_id, i.title, i.genre, i.age_rating, i.description, i.year, i.created_at
+          FROM items i
+         WHERE (
+                 :search = ''
+                 OR i.title LIKE :pattern
+                 OR i.genre LIKE :pattern
+                 OR i.age_rating LIKE :pattern
+                 OR i.description LIKE :pattern
+                 OR CAST(i.year AS TEXT) LIKE :pattern
+                 OR EXISTS (
+                       SELECT 1
+                         FROM item_tags it
+                         JOIN tags t ON t.id = it.tag_id
+                        WHERE it.item_id = i.id AND t.name_fi LIKE :pattern
+                 )
+               )
+         ORDER BY i.created_at DESC
+         LIMIT :limit OFFSET :offset
+    """
+
+    pattern = f"%{search_query}%" if search_query else ""
+    params = {
+        "search": search_query,
+        "pattern": pattern,
+        "limit": PER_PAGE,
+        "offset": offset,
+    }
+
+    rows = db.query(sql, params)
+    items = [dict(row) for row in rows]
     for item in items:
         item["tags"] = list_tags_for_item(item["id"])
-    return render_template("index.html", items=items, q=search_query)
+
+    count_sql = """
+        SELECT COUNT(DISTINCT i.id) AS total
+          FROM items i
+         WHERE (
+                 :search = ''
+                 OR i.title LIKE :pattern
+                 OR i.genre LIKE :pattern
+                 OR i.age_rating LIKE :pattern
+                 OR i.description LIKE :pattern
+                 OR CAST(i.year AS TEXT) LIKE :pattern
+                 OR EXISTS (
+                       SELECT 1
+                         FROM item_tags it
+                         JOIN tags t ON t.id = it.tag_id
+                        WHERE it.item_id = i.id AND t.name_fi LIKE :pattern
+                 )
+               )
+    """
+
+    count_row = db.query(count_sql, params)[0]
+    total_items = count_row["total"]
+    total_pages = (total_items + PER_PAGE - 1) // PER_PAGE if total_items else 1
+
+    return render_template(
+        "index.html",
+        items=items,
+        q=search_query,
+        page=page,
+        total_pages=total_pages,
+    )
 
 
 @reviews_bp.route("/about")

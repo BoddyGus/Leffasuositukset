@@ -71,6 +71,20 @@
         </li>
       {% endfor %}
     </ul>
+
+    {% if total_pages and total_pages > 1 %}
+      <div class="pagination">
+        {% if page > 1 %}
+          <a href="{{ url_for('reviews_bp.index', page=page-1, q=q) }}">&laquo; Edellinen</a>
+        {% endif %}
+
+        <span class="pagination-info">Sivu {{ page }} / {{ total_pages }}</span>
+
+        {% if page < total_pages %}
+          <a href="{{ url_for('reviews_bp.index', page=page+1, q=q) }}">Seuraava &raquo;</a>
+        {% endif %}
+      </div>
+    {% endif %}
   {% else %}
     <p>Ei elokuvia vielä.</p>
   {% endif %}
