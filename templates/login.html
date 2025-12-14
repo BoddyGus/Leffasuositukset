@@ -39,12 +39,12 @@
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
       <h1>Kirjaudu sisään</h1>
       <p>
-        Tunnus: <br />
-        <input type="text" name="username" />
+        <label for="login_username">Tunnus:</label>
+        <input id="login_username" type="text" name="username" />
       </p>
       <p>
-        Salasana: <br />
-        <input type="password" name="password" />
+        <label for="login_password">Salasana:</label>
+        <input id="login_password" type="password" name="password" />
       </p>
       <input type="submit" value="Kirjaudu" />
     </form>

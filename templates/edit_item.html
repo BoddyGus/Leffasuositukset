@@ -29,13 +29,13 @@
   <form action="/items/{{ item.id }}/update" method="post">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <p>
-      Nimi: <br />
-      <input type="text" name="title" value="{{ item.title }}" required maxlength="75" />
+      <label for="edit_title">Nimi:</label>
+      <input id="edit_title" type="text" name="title" value="{{ item.title }}" required maxlength="75" />
       <small class="hint-text">Enintään 75 merkkiä</small>
     </p>
     <p>
-      Tyylilaji (genre): <br />
-      <select name="genre" required>
+      <label for="edit_genre">Tyylilaji (genre):</label>
+      <select id="edit_genre" name="genre" required>
         <option value="">-- valitse genre --</option>
         {% for g in allowed_genres %}
           <option value="{{ g }}" {% if item.genre == g %}selected{% endif %}>{{ g }}</option>
@@ -51,8 +51,8 @@
       {% endfor %}
     </p>
     <p>
-      Ikäraja: <br />
-      <select name="age_rating" required>
+      <label for="edit_age_rating">Ikäraja:</label>
+      <select id="edit_age_rating" name="age_rating" required>
         <option value="">-- valitse ikäraja --</option>
         <option value="U" {% if item.age_rating == 'U' %}selected{% endif %}>U – Sallittu kaikenikäisille</option>
         <option value="PG" {% if item.age_rating == 'PG' %}selected{% endif %}>PG – Vanhempien harkinta suositeltavaa</option>
@@ -62,12 +62,12 @@
       </select>
     </p>
     <p>
-      Vuosi: <br />
-      <input type="number" name="year" min="1888" max="{{ current_year }}" value="{{ item.year or '' }}" required />
+      <label for="edit_year">Vuosi:</label>
+      <input id="edit_year" type="number" name="year" min="1888" max="{{ current_year }}" value="{{ item.year or '' }}" required />
     </p>
     <p>
-      Kuvaus: <br />
-      <textarea name="description" rows="4" cols="40" maxlength="350">{{ item.description or '' }}</textarea><br />
+      <label for="edit_description">Kuvaus:</label>
+      <textarea id="edit_description" name="description" rows="4" cols="40" maxlength="350">{{ item.description or '' }}</textarea><br />
       <small class="hint-text">Enintään 350 merkkiä</small>
     </p>
     <input type="submit" value="Päivitä" />

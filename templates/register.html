@@ -39,16 +39,16 @@
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <h1>Luo uusi tunnus</h1>
     <p>
-      Tunnus: <br />
-      <input type="text" name="username" />
+      <label for="register_username">Tunnus:</label>
+      <input id="register_username" type="text" name="username" />
     </p>
     <p>
-      Salasana: <br />
-      <input type="password" name="password1" />
+      <label for="register_password1">Salasana:</label>
+      <input id="register_password1" type="password" name="password1" />
     </p>
     <p>
-      Salasana uudestaan: <br />
-      <input type="password" name="password2" />
+      <label for="register_password2">Salasana uudestaan:</label>
+      <input id="register_password2" type="password" name="password2" />
     </p>
     <input type="submit" value="Luo tunnus" />
   </form>

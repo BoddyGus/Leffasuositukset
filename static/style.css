@@ -255,20 +255,6 @@ body > p {
     text-align: center;
 }
 
-.home-link {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    width: 50px;
-    height: 50px;
-    z-index: 100;
-}
-
-.home-icon {
-    width: 100%;
-    height: 100%;
-}
-
 .flash-messages {
     list-style: none;
     padding-left: 0;
