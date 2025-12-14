@@ -60,8 +60,9 @@ def index():
     offset = (page - 1) * PER_PAGE
 
     sql = """
-        SELECT i.id, i.user_id, i.title, i.genre, i.age_rating, i.description, i.year, i.created_at
-          FROM items i
+        SELECT i.id, i.user_id, i.title, i.genre, i.age_rating, i.description, i.year, i.created_at, u.username
+                    FROM items i
+                    JOIN users u ON u.id = i.user_id
          WHERE (
                  :search = ''
                  OR i.title LIKE :pattern
