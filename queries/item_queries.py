@@ -21,11 +21,11 @@ def list_items(search: str):
                OR i.id IN (
                     SELECT it.item_id FROM item_tags it
                     JOIN tags t ON t.id = it.tag_id
-                    WHERE t.name_fi LIKE ? OR t.slug LIKE ?
+                    WHERE t.name_fi LIKE ?
                )
             ORDER BY i.created_at DESC
         """
-        return db.query(sql, [like, like, like, like, like, like, like])
+        return db.query(sql, [like, like, like, like, like, like])
     sql = base + " ORDER BY i.created_at DESC"
     return db.query(sql, [])
 
@@ -41,11 +41,11 @@ def get_item(item_id: int):
     return rows[0] if rows else None
 
 def list_tags():
-    return db.query("SELECT id, slug, name_fi FROM tags ORDER BY name_fi", [])
+    return db.query("SELECT id, name_fi FROM tags ORDER BY name_fi", [])
 
 def list_tags_for_item(item_id: int):
     sql = """
-        SELECT t.id, t.slug, t.name_fi
+                SELECT t.id, t.name_fi
           FROM item_tags it
           JOIN tags t ON t.id = it.tag_id
          WHERE it.item_id = ?

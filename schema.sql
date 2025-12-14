@@ -31,11 +31,9 @@ CREATE TABLE IF NOT EXISTS item_reviews (
 CREATE INDEX IF NOT EXISTS idx_item_reviews_item ON item_reviews(item_id);
 CREATE INDEX IF NOT EXISTS idx_item_reviews_user ON item_reviews(user_id);
 
--- Tags (moods) and item-tag join
 CREATE TABLE IF NOT EXISTS tags (
     id INTEGER PRIMARY KEY,
-    slug TEXT UNIQUE NOT NULL,
-    name_fi TEXT NOT NULL
+    name_fi TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS item_tags (
@@ -46,15 +44,14 @@ CREATE TABLE IF NOT EXISTS item_tags (
     FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
 );
 
--- Seed tags (slug, Finnish label)
-INSERT OR IGNORE INTO tags (slug, name_fi) VALUES
-    ('uplifting', 'Nostattava'),
-    ('heartwarming', 'Lämmittävä'),
-    ('funny', 'Hauska'),
-    ('adventurous', 'Seikkailullinen'),
-    ('exciting', 'Jännittävä'),
-    ('tense', 'Kireä'),
-    ('dark', 'Synkkä'),
-    ('thought-provoking', 'Ajatuksia herättävä'),
-    ('emotional', 'Tunteikas'),
-    ('romantic', 'Romanttinen');
+INSERT OR IGNORE INTO tags (name_fi) VALUES
+    ('Nostattava'),
+    ('Lämmittävä'),
+    ('Hauska'),
+    ('Seikkailullinen'),
+    ('Jännittävä'),
+    ('Kireä'),
+    ('Synkkä'),
+    ('Ajatuksia herättävä'),
+    ('Tunteikas'),
+    ('Romanttinen');
