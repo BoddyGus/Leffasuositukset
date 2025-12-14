@@ -55,7 +55,7 @@ $ flask run
 
 For testing the application with a larger amount of data, you can:
 
-1. Recreate the database (this also adds an index on `items.user_id`):
+1. Recreate the database:
 
   ```
   $ sqlite3 database.db < schema.sql
