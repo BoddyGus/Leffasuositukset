@@ -6,9 +6,6 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-  <a href="{{ url_for('reviews_bp.index') }}" class="home-link">
-    <img src="{{ url_for('static', filename='home-icon.svg') }}" alt="Home" class="home-icon" />
-  </a>
   {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
       <ul class="flash-messages">
