@@ -9,7 +9,26 @@
   <a href="{{ url_for('reviews_bp.index') }}" class="home-link">
     <img src="{{ url_for('static', filename='home-icon.svg') }}" alt="Home" class="home-icon" />
   </a>
+
   <h1>Lisää elokuva</h1>
+
+  {% if session.username %}
+    <p>Olet kirjautunut nimellä {{ session.username }}</p>
+  {% endif %}
+
+  <p class="nav-links">
+    <a href="{{ url_for('reviews_bp.index') }}">Etusivu</a>
+    | <a href="{{ url_for('reviews_bp.about') }}">Tietoa sovelluksesta</a>
+    {% if not session.username %}
+      | <a href="{{ url_for('user_bp.register') }}">Rekisteröidy</a>
+      | <a href="{{ url_for('user_bp.login') }}">Kirjaudu</a>
+    {% else %}
+      | <a href="{{ url_for('user_bp.profile', username=session.username) }}">Profiili</a>
+      | <a href="/logout">Kirjaudu ulos</a>
+      | <a href="/new_item">Lisää uusi elokuva</a>
+    {% endif %}
+  </p>
+
 
   <form action="/items/create" method="post">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">

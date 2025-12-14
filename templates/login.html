@@ -24,8 +24,20 @@
 
   {% if session.username %}
     <p>Olet kirjautunut nimellä {{ session.username }}</p>
-    <p><a href="/logout">Kirjaudu ulos</a></p>
-  {% else %}
+  {% endif %}
+
+  <p class="nav-links">
+    <a href="{{ url_for('reviews_bp.index') }}">Etusivu</a>
+    | <a href="{{ url_for('reviews_bp.about') }}">Tietoa sovelluksesta</a>
+    {% if not session.username %}
+      | <a href="{{ url_for('user_bp.register') }}">Rekisteröidy</a>
+    {% else %}
+      | <a href="{{ url_for('user_bp.profile', username=session.username) }}">Profiili</a>
+      | <a href="/logout">Kirjaudu ulos</a>
+    {% endif %}
+  </p>
+
+  {% if not session.username %}
     <form action="/login" method="post">
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
       <h1>Kirjaudu sisään</h1>
