@@ -72,3 +72,7 @@ For testing the application with a larger amount of data, you can:
 The front page uses server-side pagination (6 movies per page) when listing movies. The search field and page number (`page` parameter in the URL) can be used together, so you can test how searching and paging behave with large datasets.
 
 With the default seed values (about 200 users, 5000 movies and 20000 reviews), the performance was measured using `time` and `curl` while the application was running. Loading the front page with different page numbers (`/?page=1`, `/?page=5`, `/?page=10`) took around 0.012 seconds per request. Searching with a common keyword and paging through the results (`/?q=action&page=1` and `/?q=action&page=3`) took about 0.059 seconds and 0.022 seconds respectively. These results indicate that server-side pagination keeps response times low even with a relatively large amount of data.
+
+## Code Style Checks
+
+Pylint was run for all Python files in the project with the command `pylint .`. The final overall score was **8.03/10**. Most of the remaining warnings relate to missing docstrings, long or branch-heavy functions and some duplicate code. These parts were left as they are at the end of the project to avoid introducing new bugs into otherwise working and tested functionality.

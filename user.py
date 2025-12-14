@@ -1,10 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, session, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-import db
-from queries.user_queries import create_user, find_user_credentials, find_user_id
-from flask import flash
-from app import check_csrf
 import secrets
+
+import db
+from app import check_csrf
 
 user_bp = Blueprint("user_bp", __name__)
 

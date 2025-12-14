@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, session, url_for
+from flask import Blueprint, render_template, request, redirect, session, url_for, flash
 from datetime import datetime
 import db
 from user import current_username, current_user_id
@@ -10,14 +10,12 @@ from queries.review_queries import (
 )
 from queries.item_queries import (
     get_item,
-    list_items as list_items_query,
     list_tags,
     list_tags_for_item,
     set_item_tags,
 )
 from queries.user_queries import find_user_id
 from app import check_csrf
-from flask import flash
 
 ALLOWED_GENRES = [
     "toiminta",

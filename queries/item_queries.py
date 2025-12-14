@@ -1,7 +1,8 @@
 import db
 
 ITEM_COLUMNS = (
-    "i.id AS id, i.user_id, i.title, i.genre, i.age_rating, i.description, i.year, i.created_at"
+    "i.id AS id, i.user_id, i.title, i.genre, i.age_rating, "
+    "i.description, i.year, i.created_at"
 )
 
 def list_items(search: str):
