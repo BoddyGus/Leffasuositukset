@@ -12,6 +12,10 @@
 
   <h1>Leffasuositukset</h1>
 
+  {% if session.username %}
+    <p>Olet kirjautunut nimellä {{ session.username }}</p>
+  {% endif %}
+
   <p class="nav-links">
     <a href="{{ url_for('reviews_bp.index') }}">Etusivu</a>
     | <a href="{{ url_for('reviews_bp.about') }}">Tietoa sovelluksesta</a>
