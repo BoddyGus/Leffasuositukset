@@ -6,15 +6,15 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-  <a href="{{ url_for('reviews_bp.index') }}" style="position: fixed; top: 20px; left: 20px; width: 50px; height: 50px; z-index: 100;">
-    <img src="{{ url_for('static', filename='home-icon.svg') }}" alt="Home" style="width: 100%; height: 100%;" />
+  <a href="{{ url_for('reviews_bp.index') }}" class="home-link">
+    <img src="{{ url_for('static', filename='home-icon.svg') }}" alt="Home" class="home-icon" />
   </a>
 
   {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
-      <ul style="list-style:none; padding-left:0;">
+      <ul class="flash-messages">
         {% for category, msg in messages %}
-          <li style="margin:4px 0; color:{% if category=='error' %}#b00000{% elif category=='success' %}#0a6000{% else %}#222{% endif %};">
+          <li class="flash-message flash-{{ category }}">
             {{ msg }}
           </li>
         {% endfor %}

@@ -6,14 +6,14 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-  <a href="{{ url_for('reviews_bp.index') }}" style="position: fixed; top: 20px; left: 20px; width: 50px; height: 50px; z-index: 100;">
-    <img src="{{ url_for('static', filename='home-icon.svg') }}" alt="Home" style="width: 100%; height: 100%;" />
+  <a href="{{ url_for('reviews_bp.index') }}" class="home-link">
+    <img src="{{ url_for('static', filename='home-icon.svg') }}" alt="Home" class="home-icon" />
   </a>
   {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
-      <ul style="list-style:none; padding-left:0; margin:0 0 12px;">
+      <ul class="flash-messages">
         {% for category, msg in messages %}
-          <li style="margin:4px 0; color:{% if category=='error' %}#b00000{% elif category=='success' %}#0a6000{% else %}#222{% endif %};">
+          <li class="flash-message flash-{{ category }}">
             {{ msg }}
           </li>
         {% endfor %}
@@ -23,7 +23,7 @@
 
   <h1>Leffasuositukset</h1>
 
-  <section style="background-color: #f5f5f5; padding: 1em; margin: 1em 0; border-radius: 4px;">
+  <section class="about-section">
     <h2>Sovelluksesta</h2>
     <p>
       Leffasuositukset on yhteisöllinen elokuvien arvostelualusta, jossa voit jakaa suosiksiesi elokuvia ja löytää uusia suosituksia muilta käyttäjiltä.
@@ -54,22 +54,22 @@
     {% endif %}
   </p>
 
-  <form action="/" method="get" style="margin: 1em 0;">
-    <input type="text" name="q" placeholder="Hae nimellä, tyylilajilla, ikärajalla, tunnisteilla, kuvauksella tai vuodella" value="{{ q or '' }}" style="width: 520px;" />
+  <form action="/" method="get" class="search-form">
+    <input type="text" name="q" placeholder="Hae nimellä, tyylilajilla, ikärajalla, tunnisteilla, kuvauksella tai vuodella" value="{{ q or '' }}" class="search-input" />
     <input type="submit" value="Hae" />
   </form>
 
   {% if items and items|length > 0 %}
     <ul>
       {% for item in items %}
-        <li style="margin-bottom: 0.8em;">
+        <li class="movie-list-item">
           <strong><a href="{{ url_for('reviews_bp.items_show', item_id=item.id) }}">{{ item.title }}</a></strong>
           {% if item.year %} ({{ item.year }}){% endif %}
           {% if item.genre %} — {{ item.genre }}{% endif %}
           {% if item.age_rating %} · Ikäraja: {{ item.age_rating }}{% endif %}
           {% if item.tags and item.tags|length > 0 %}
             <br />
-            <span style="font-size: 0.95em;">Tunnisteet: {{ item.tags | map(attribute='name_fi') | join(', ') }}</span>
+            <span class="movie-tags">Tunnisteet: {{ item.tags | map(attribute='name_fi') | join(', ') }}</span>
           {% endif %}
           <br />
           {% if item.description %}<em>{{ item.description | show_lines }}</em><br />{% endif %}
@@ -78,7 +78,7 @@
           <br />
           {% if session.username %}
             {% if session.username == item.username %}
-              <form action="/items/{{ item.id }}/delete" method="post" style="display:inline;">
+              <form action="/items/{{ item.id }}/delete" method="post" class="inline-form">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                 <a href="/items/{{ item.id }}/edit">Muokkaa</a>
                 <input type="submit" value="Poista" />

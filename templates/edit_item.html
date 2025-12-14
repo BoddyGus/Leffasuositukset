@@ -6,8 +6,8 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-  <a href="{{ url_for('reviews_bp.index') }}" style="position: fixed; top: 20px; left: 20px; width: 50px; height: 50px; z-index: 100;">
-    <img src="{{ url_for('static', filename='home-icon.svg') }}" alt="Home" style="width: 100%; height: 100%;" />
+  <a href="{{ url_for('reviews_bp.index') }}" class="home-link">
+    <img src="{{ url_for('static', filename='home-icon.svg') }}" alt="Home" class="home-icon" />
   </a>
   <h1>Muokkaa elokuvaa</h1>
 
@@ -16,7 +16,7 @@
     <p>
       Nimi: <br />
       <input type="text" name="title" value="{{ item.title }}" required maxlength="75" />
-      <small style="color: #666;">Enintään 75 merkkiä</small>
+      <small class="hint-text">Enintään 75 merkkiä</small>
     </p>
     <p>
       Tyylilaji (genre): <br />
@@ -30,7 +30,7 @@
     <p>
       Tunnisteet (tunnelma): <br />
       {% for t in tags %}
-        <label style="display:block;">
+        <label class="tag-checkbox">
           <input type="checkbox" name="tags" value="{{ t.id }}" {% if t.id in selected_tag_ids %}checked{% endif %} /> {{ t.name_fi }}
         </label>
       {% endfor %}
@@ -53,7 +53,7 @@
     <p>
       Kuvaus: <br />
       <textarea name="description" rows="4" cols="40" maxlength="250">{{ item.description or '' }}</textarea><br />
-      <small style="color: #666;">Enintään 250 merkkiä</small>
+      <small class="hint-text">Enintään 250 merkkiä</small>
     </p>
     <input type="submit" value="Päivitä" />
     <a href="/">Peruuta</a>
